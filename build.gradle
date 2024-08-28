@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.2'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'fauna.sample'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    testImplementation platform('org.junit:junit-bom:5.9.1')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'org.springframework.boot:spring-boot-starter-web:3.3.2'
+    implementation files('../fauna-jvm/build/libs/fauna-jvm-0.1.0-M5-SNAPSHOT.jar')
+}
+
+test {
+    useJUnitPlatform()
+}
+
+// run schema setup
+tasks.register('setupSchema') {
+    doLast {
+        exec {
+            workingDir '.'
+            commandLine 'sh', './schema/setup.sh'
+        }
+    }
+}
+
+// reset schema
+tasks.register('resetSchema') {
+    doLast {
+        exec {
+            workingDir '.'
+            commandLine 'sh', '-c', 'rm .fauna-project && fauna delete-database hospital_information_system'
+        }
+    }
+}
