@@ -22,7 +22,7 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     implementation 'org.springframework.boot:spring-boot-starter-web:3.3.2'
-    implementation files('../fauna-jvm/build/libs/fauna-jvm-0.1.0-M5-SNAPSHOT.jar')
+    implementation files('./libs/fauna-jvm-0.1.0-M5-SNAPSHOT.jar')
 }
 
 test {

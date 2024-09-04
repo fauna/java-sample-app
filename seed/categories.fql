@@ -1,0 +1,11 @@
+{"query": "[
+  {
+    'name': 'electronics'
+  },
+  {
+    'name': 'books'
+  },
+  {
+    'name': 'movies'
+  }
+].map(c => Category.byName(c.name).first() ?? Category.create({ name: c.name, description: 'Bargain #{c.name}!' }))"}

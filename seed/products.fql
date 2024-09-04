@@ -1,0 +1,78 @@
+{"query":"[
+  {
+    'name': 'iPhone',
+    'price': 10000,
+    'description': 'Apple flagship phone',
+    'stock': 100,
+    'category': 'electronics'
+  },
+  {
+    'name': 'Drone',
+    'price': 9000,
+    'description': 'Fly and let people wonder if you are filming them!',
+    'stock': 0,
+    'category': 'electronics'
+  },
+  {
+    'name': 'Signature Box III',
+    'price': 300000,
+    'description': 'Latest box by Hooli!',
+    'stock': 1000,
+    'category': 'electronics'
+  },
+  {
+    'name': 'Rapsberry Pi',
+    'price': 3000,
+    'description': 'A tiny computer',
+    'stock': 5,
+    'category': 'electronics'
+  },
+  {
+    'name': 'For Whom the Bell Tolls',
+    'price': 899,
+    'description': 'A book by Ernest Hemingway',
+    'stock': 10,
+    'category': 'books'
+  },
+  {
+    'name': 'Getting Started with Fauna',
+    'price': 1999,
+    'description': 'A book by Fauna, Inc.',
+    'stock': 0,
+    'category': 'books'
+  },
+  {
+    'name': 'The Godfather',
+    'price': 1299,
+    'description': 'A movie by Francis Ford Coppola',
+    'stock': 10,
+    'category': 'movies'
+  },
+  {
+    'name': 'The Godfather II',
+    'price': 1299,
+    'description': 'A movie by Francis Ford Coppola',
+    'stock': 10,
+    'category': 'movies'
+  },
+  {
+    'name': 'The Godfather III',
+    'price': 1299,
+    'description': 'A movie by Francis Ford Coppola',
+    'stock': 10,
+    'category': 'movies'
+  }
+].map(p => {\n
+  let existing: Any = Product.byName(p.name).first()\n
+  if (existing != null) {\n
+    existing!.update({ stock: p.stock })\n
+  } else {\n
+    Product.create({\n
+      name: p.name,\n
+      price: p.price,\n
+      description: p.description,\n
+      stock: p.stock,\n
+      category: Category.byName(p.category).first()!\n
+    })\n
+  }\n
+}\n)"}

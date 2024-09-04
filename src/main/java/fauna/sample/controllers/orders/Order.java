@@ -1,6 +1,6 @@
 package fauna.sample.controllers.orders;
 
-import com.fauna.annotation.FaunaField;
+import com.fauna.annotation.FaunaId;
 import fauna.sample.controllers.customers.Customer;
 import fauna.sample.controllers.products.Product;
 
@@ -8,25 +8,66 @@ import java.time.Instant;
 
 public class Order {
 
+    public String getId() {
+        return id;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public Item getItems() {
+        return items;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
     public enum Status {
-        Cart,
-        Processing,
-        Shipped,
-        Delivered
+        cart,
+        processing,
+        shipped,
+        delivered
     }
 
     public static class Item {
-        public String id;
-        public Order order;
-        public Product product;
-        public Integer quantity;
+        @FaunaId
+        private String id;
+        private Order order;
+        private Product product;
+        private Integer quantity;
+
+        public String getId() {
+            return id;
+        }
+
+        public Order getOrder() {
+            return order;
+        }
+
+        public Product getProduct() {
+            return product;
+        }
+
+        public Integer getQuantity() {
+            return quantity;
+        }
     }
 
-    public String id;
-    @FaunaField(name = "created_at")
-    public Instant createdAt;
-    public Customer customer;
-    public Item items;
-    public Status status;
-    public Integer total;
+    @FaunaId
+    private String id;
+    private Instant createdAt;
+    private Customer customer;
+    private Item items;
+    private Status status;
+    private Integer total;
 }

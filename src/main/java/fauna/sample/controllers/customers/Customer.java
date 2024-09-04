@@ -1,25 +1,25 @@
 package fauna.sample.controllers.customers;
 
-import com.fauna.annotation.FaunaField;
+import com.fauna.annotation.FaunaId;
 import fauna.sample.controllers.orders.Order;
 
 import java.util.List;
 
-public class Customer {
-    public static class Address {
-        public String street;
-        public String city;
-        public String state;
-        @FaunaField(name = "postal_code")
-        public String postalCode;
-        public String country;
+public class Customer extends CustomerInfo {
+    @FaunaId
+    private String id;
+    private Order cart;
+    private List<Order> orders;
 
+    public String getId() {
+        return id;
     }
 
-    public String id;
-    public String name;
-    public String email;
-    public Order cart;
-    public List<Order> orders;
-    public Address address;
+    public Order getCart() {
+        return cart;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
 }
