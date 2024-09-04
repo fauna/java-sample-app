@@ -6,8 +6,8 @@
 4. Create a database `fauna create-database --environment='' ECommerceJava`
 5. Push the schema `fauna schema push`
 2. Create a secret `fauna create-key --environment='' ECommerceJava server`
-3. Seed some data `FAUNA_SECRET=fnAFqe30pHAAQmCrf0ccbGM_rvy3EOGekowo-S2J ./setup.sh`
-4. Start the service `FAUNA_SECRET=fnAFqe30pHAAQmCrf0ccbGM_rvy3EOGekowo-S2J ./gradlew bootRun`
+3. Seed some data `FAUNA_SECRET=<secret> ./setup.sh`
+4. Start the service `FAUNA_SECRET=<secret> ./gradlew bootRun`
 5. Start exploring
 
 ##### Get a customer:
