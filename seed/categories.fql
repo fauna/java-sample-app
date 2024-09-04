@@ -8,4 +8,4 @@
   {
     'name': 'movies'
   }
-].map(c => Category.byName(c.name).first() ?? Category.create({ name: c.name, description: 'Bargain #{c.name}!' }))"}
+].map(c => Category.byName(c.name).first() ?? Category.create({ name: c.name, description: \"Bargain #{c.name}!\" }))"}
