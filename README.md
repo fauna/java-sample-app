@@ -17,7 +17,7 @@ curl "http://localhost:8080/customers/999" | jq .
 
 ##### Create a new cart:
 ```
-curl -X POST -H 'Content-Type: application/json' "http://localhost:8080/customers/999/cart" | jq.
+curl -X POST -H 'Content-Type: application/json' "http://localhost:8080/customers/999/cart" | jq .
 ```
 
 ##### List products: 
