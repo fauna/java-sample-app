@@ -5,6 +5,7 @@ import fauna.sample.controllers.customers.Customer;
 import fauna.sample.controllers.products.Product;
 
 import java.time.Instant;
+import java.util.List;
 
 public class Order {
 
@@ -20,7 +21,7 @@ public class Order {
         return customer;
     }
 
-    public Item getItems() {
+    public List<Item> getItems() {
         return items;
     }
 
@@ -67,7 +68,7 @@ public class Order {
     private String id;
     private Instant createdAt;
     private Customer customer;
-    private Item items;
+    private List<Item> items;
     private Status status;
     private Integer total;
 }
