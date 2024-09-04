@@ -34,7 +34,7 @@ tasks.register('setupSchema') {
     doLast {
         exec {
             workingDir '.'
-            commandLine 'sh', './schema/setup.sh'
+            commandLine 'sh', './setup.sh'
         }
     }
 }
@@ -44,7 +44,7 @@ tasks.register('resetSchema') {
     doLast {
         exec {
             workingDir '.'
-            commandLine 'sh', '-c', 'rm .fauna-project && fauna delete-database hospital_information_system'
+            commandLine 'sh', '-c', 'rm .fauna-project && fauna delete-database ECommerceJava'
         }
     }
 }
