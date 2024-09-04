@@ -12,17 +12,17 @@
 
 ##### Get a customer:
 ```
-curl "http://localhost:8080/customers/999" | jq .
+curl --silent "http://localhost:8080/customers/999" | jq .
 ```
 
 ##### Create a new cart:
 ```
-curl -X POST -H 'Content-Type: application/json' "http://localhost:8080/customers/999/cart" | jq .
+curl --silent -X POST -H 'Content-Type: application/json' "http://localhost:8080/customers/999/cart" | jq .
 ```
 
-##### List products: 
+##### List products:
 ```
-curl "http://localhost:8080/products?pageSize=2" | jq .
+curl --silent "http://localhost:8080/products?pageSize=2" | jq .
 ```
 
 ### Now what?
