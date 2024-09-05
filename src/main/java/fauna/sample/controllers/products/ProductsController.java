@@ -20,7 +20,7 @@ import java.util.concurrent.Future;
 import static com.fauna.query.builder.Query.fql;
 
 @RestController
-public class Products {
+public class ProductsController {
 
     public static class ProductRequest {
         private String name;
@@ -53,7 +53,7 @@ public class Products {
     private final FaunaClient client;
 
     @Autowired
-    public Products(FaunaClient client) {
+    public ProductsController(FaunaClient client) {
         this.client = client;
     }
 
@@ -106,12 +106,12 @@ public class Products {
 
     @Async
     @PostMapping("/products")
-    Future<Product> create(@RequestBody Product product) {
+    Future<Product> create(@RequestBody CreateProductRequest req) {
         // TODO: Validate product
-        Map<String,Object> args = Map.of("product", product);
+        Map<String,Object> args = Map.of("req", req);
 
         Query query = fql("""
-                  let input = ${product};
+                  let input = ${req};
                   
                   // Get the category by name. We can use .first() here because we know that the category
                   // name is unique.
@@ -161,18 +161,18 @@ public class Products {
         Query query;
         if (afterToken != null) {
             query = fql("Set.paginate(${afterToken})", Map.of("afterToken", afterToken));
-        }
-        // This is an example of a covered query.  A covered query is a query where all fields
-        // returned are indexed fields. In this case, we are querying the Product collection
-        // for products with a price between minPrice and maxPrice. We are also limiting the
-        // number of results returned to the limit parameter. The query is covered because
-        // all fields returned are indexed fields. In this case, the fields returned are
-        // `name`, `description`, `price`, and `stock` are all indexed fields.
-        // Covered queries are typically faster and less expensive than uncovered queries,
-        // which require document reads.
-        // Learn more about covered queries here: https://docs.fauna.com/fauna/current/learn/data_model/indexes#covered-queries
-        Map<String, Object> args = Map.of("minPrice", minPrice,"maxPrice", maxPrice, "pageSize", pageSize);
-        query = fql("""
+        } else {
+            // This is an example of a covered query.  A covered query is a query where all fields
+            // returned are indexed fields. In this case, we are querying the Product collection
+            // for products with a price between minPrice and maxPrice. We are also limiting the
+            // number of results returned to the limit parameter. The query is covered because
+            // all fields returned are indexed fields. In this case, the fields returned are
+            // `name`, `description`, `price`, and `stock` are all indexed fields.
+            // Covered queries are typically faster and less expensive than uncovered queries,
+            // which require document reads.
+            // Learn more about covered queries here: https://docs.fauna.com/fauna/current/learn/data_model/indexes#covered-queries
+            Map<String, Object> args = Map.of("minPrice", minPrice,"maxPrice", maxPrice, "pageSize", pageSize);
+            query = fql("""
                 Product.sortedByPriceLowToHigh({ from: ${minPrice}, to: ${maxPrice}})
                 .pageSize(${pageSize}) {
                   id,
@@ -187,6 +187,7 @@ public class Products {
                   }
                 }
                 """, args);
+        }
 
         return CompletableFuture.completedFuture(client.paginate(query, Product.class).next());
     }

@@ -21,7 +21,7 @@ import java.util.concurrent.Future;
 import static com.fauna.query.builder.Query.fql;
 
 @RestController
-public class Orders {
+public class OrdersController {
 
     public static class OrderUpdate {
         private Order.Status status;
@@ -84,7 +84,7 @@ public class Orders {
       """);
 
     @Autowired
-    public Orders(FaunaClient client) {
+    public OrdersController(FaunaClient client) {
         this.client = client;
     }
 
