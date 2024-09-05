@@ -167,9 +167,10 @@ Once started, the local server is available at http://localhost:8000.
 The app's HTTP API endpoints are defined in `*Controller` files in the
 `java.sample.controllers.*` modules.
 
-This contains an OpenAPI spec and Swagger UI available respectively at:
-* http://localhost:8080/v3/api-docs
-* http://localhost:8080/swagger-ui
+An OpenAPI spec and Swagger UI docs for the endpoints are available at:
+
+* OpenAPI spec: http://localhost:8080/v3/api-docs
+* Swagger UI: http://localhost:8080/swagger-ui.html
 
 
 ### Make API requests
@@ -207,6 +208,8 @@ Customer documents and related API responses:
     ```sh
     FAUNA_SECRET=<secret> ./setup.sh
     ```
+
+    If the app server is running, stop the server by pressing Ctrl+C.
 
 2. In `schema/collections.fsl`, add the following `totalPurchaseAmt` computed
    field definition to the `Customer` collection:
@@ -246,8 +249,8 @@ Customer documents and related API responses:
                 id,
                 name,
                 email,
-    +           totalPurchaseAmt,
-                address
+                address,
+    +           totalPurchaseAmt
               }
             """);
     `;
@@ -258,33 +261,68 @@ Customer documents and related API responses:
    Customer-related endpoints use this template to project Customer
    document fields in responses.
 
-5. Start the app server:
+5. In `Customer.java`, add the
+   `totalPurchaseAmt` field and a related getter
+   to the `Customer` class:
+
+    ```diff
+        private Order cart;
+        private List<Order> orders;
+
+    +   private int totalPurchaseAmt;
+
+        public String getId() {
+            return id;
+        }
+
+        public Order getCart() {
+            return cart;
+        }
+
+        public List<Order> getOrders() {
+            return orders;
+        }
+
+    +   public int getTotalPurchaseAmt() {
+    +       return totalPurchaseAmt;
+    +   }
+    }
+    ```
+
+   Save `Customer.java`.
+
+   Customer-related endpoints return responses that
+   conform to the `Customer` class.
+
+6. Start the app server:
 
     ```sh
     FAUNA_SECRET=<secret> ./gradlew bootRun
     ```
 
-6. With the local server running in a separate terminal tab, run the
+7. With the local server running in a separate terminal tab, run the
    following curl request to the `POST /customers` endpoint:
 
     ```sh
-    curl -v http://localhost:8000/customers/999 | jq .
+    curl -v http://localhost:8080/customers/999 | jq .
     ```
 
    The response includes the computed `totalPurchaseAmt` field:
 
     ```json
     {
-      "id": "999",
       "name": "Valued Customer",
-      "email": "valuedcustomer@fauna.com",
-      "totalPurchaseAmt": 27000,
+      "email": "fake@fauna.com",
       "address": {
-        "street": "123 Main St",
-        "city": "San Francisco",
-        "state": "CA",
-        "postalCode": "12345",
-        "country": "United States"
-      }
+        "street": "Herengracht",
+        "city": "Amsterdam",
+        "state": "North Holland",
+        "postalCode": "1015BT",
+        "country": "Netherlands"
+      },
+      "id": "999",
+      "cart": null,
+      "orders": null,
+      "totalPurchaseAmt": 0
     }
     ```
