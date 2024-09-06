@@ -174,18 +174,21 @@ public class ProductsController {
             Map<String, Object> args = Map.of("minPrice", minPrice,"maxPrice", maxPrice, "pageSize", pageSize);
             query = fql("""
                 Product.sortedByPriceLowToHigh({ from: ${minPrice}, to: ${maxPrice}})
-                .pageSize(${pageSize}) {
-                  id,
-                  name,
-                  price,
-                  description,
-                  stock,
-                  category {
-                    id,
-                    name,
-                    description
-                  }
-                }
+                .pageSize(${pageSize}).map(product => {
+                    let product: Any = product
+                    product {
+                      id,
+                      name,
+                      price,
+                      description,
+                      stock,
+                      category {
+                        id,
+                        name,
+                        description
+                      }
+                    }
+                  })
                 """, args);
         }
 
