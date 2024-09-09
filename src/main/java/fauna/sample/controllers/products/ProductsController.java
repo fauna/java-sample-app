@@ -70,6 +70,11 @@ public class ProductsController {
         if (afterToken != null) {
             query = fql("Set.paginate(${afterToken})", Map.of("afterToken", afterToken));
         } else {
+
+            // Define an FQL query fragment that will return a page of products. This query
+            // fragment will either return all products sorted by category or all products in a specific
+            // category depending on whether the category query parameter is provided. This will later
+            // be embedded in a larger query.
             Query subQuery;
             if (category == null)
                 subQuery = fql(
@@ -81,6 +86,8 @@ public class ProductsController {
                         Map.of("category", category, "pageSize", pageSize));
             }
 
+            // Define the main query. This query will return a page of products using the query fragment
+            // defined above.
             query = fql("""
                     // Return only the fields we want to display to the user
                     // by mapping over the data returned by the index and returning a
@@ -101,15 +108,21 @@ public class ProductsController {
                     """, Map.of("subQuery", subQuery));
         }
 
+        // Connect to fauna using the client. The paginate method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Product.class to specify that the query will return a single
+        // item representing a Product.
         return CompletableFuture.completedFuture(client.paginate(query, Product.class).next());
     }
 
     @Async
     @PostMapping("/products")
-    Future<Product> create(@RequestBody CreateProductRequest req) {
-        // TODO: Validate product
+    Future<Product> create(@RequestBody ProductRequest req) {
         Map<String,Object> args = Map.of("req", req);
 
+        // Using the abort function we can throw an error if a condition is not met. In this case,
+        // we check if the category exists before creating the product. If the category does not exist,
+        // fauna will throw an AbortError which we can handle in our catch block.
         Query query = fql("""
                   let input = ${req};
                   
@@ -139,13 +152,63 @@ public class ProductsController {
                   }
                   """, args);
 
+        // Connect to fauna using the client. The query method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Product.class to specify that the query will return a single
+        // item representing a Product.
         return client.asyncQuery(query, Product.class).thenApply(QuerySuccess::getData);
     }
 
     @Async
     @PostMapping("/products/{id}")
-    Future<Product> create(@PathVariable String id, @RequestBody ProductRequest req) {
-        return client.asyncQuery(fql("{}"), Product.class).thenApply(QuerySuccess::getData);
+    Future<Product> update(@PathVariable String id, @RequestBody ProductRequest req) {
+
+        Query query = fql("""
+                          let input = ${req};
+
+                          // Get the product by id, using the ! operator to assert that the product exists.
+                          // If it does not exist Fauna will throw a document_not_found error.
+                          let product: Any = Product.byId(${id})!
+                          
+                          // Get the category by name. We can use .first() here because we know that the category
+                          // name is unique.
+                          let category = Category.byName(intput.category).first()
+                          
+                          // If a category was provided and it does not exist, abort the transaction.
+                          if (${!!category} && category == null) abort("Category does not exist.")
+                          
+                          let fields = { name: input.name, price: input.price, stock: input.stock, description: input.description }
+                          
+                          if (category != null) {
+                            // If a category was provided, update the product with the new category document as well as
+                            // any other fields that were provided.
+                            product!.update(Object.assign(fields, { category: category }))
+                          } else {
+                            // If no category was provided, update the product with the fields that were provided.
+                            product!.update(fields)
+                          }
+                                                    
+                          // Use projection to only return the fields you need.
+                          product {
+                            id,
+                            name,
+                            price,
+                            description,
+                            stock,
+                            category {
+                              id,
+                              name,
+                              description
+                            }
+                          }
+                """);
+
+
+        // Connect to fauna using the client. The query method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Product.class to specify that the query will return a single
+        // item representing a Product.
+        return client.asyncQuery(query, Product.class).thenApply(QuerySuccess::getData);
     }
 
     @Async
@@ -192,6 +255,10 @@ public class ProductsController {
                 """, args);
         }
 
+        // Connect to fauna using the client. The paginate method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Product.class to specify that the query will return a single
+        // item representing a Product.
         return CompletableFuture.completedFuture(client.paginate(query, Product.class).next());
     }
 }

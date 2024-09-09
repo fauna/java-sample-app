@@ -96,6 +96,11 @@ public class OrdersController {
                 let order: Any = Order.byId(${id})!
                 ${response}
                 """, args);
+
+        // Connect to fauna using the client. The query method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Order.class to specify that the query will return a single
+        // item representing an Order.
         return client.asyncQuery(q, Order.class).thenApply(QuerySuccess::getData);
     }
 
@@ -143,6 +148,10 @@ public class OrdersController {
                 """, args);
         }
 
+        // Connect to fauna using the client. The query method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Order.class to specify that the query will return a single
+        // item representing an Order.
         return client.asyncQuery(query, Order.class).thenApply(QuerySuccess::getData);
     }
 
@@ -154,6 +163,12 @@ public class OrdersController {
             query = fql("Set.paginate(${afterToken})", Map.of("afterToken", afterToken));
         } else {
             pageSize = pageSize != null ? pageSize : 10;
+
+            // Define an FQL query to retrieve a page of orders for a given customer.
+            // Get the Customer document by id, using the ! operator to assert that the document exists.
+            // If the document does not exist, Fauna will throw a document_not_found error. We then
+            // use the Order.byCustomer index to retrieve all orders for that customer and map over
+            // the results to return only the fields we care about.
             var args = Map.of("customerId", customerId,"pageSize", pageSize,"response", response);
             query = fql("""
                 let customer: Any = Customer.byId(${customerId})!
@@ -166,26 +181,39 @@ public class OrdersController {
                 """, args);
         }
 
+        // Connect to fauna using the client. The paginate method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Order.class to specify that the query will return a single
+        // item representing an Order.
         return CompletableFuture.completedFuture(client.paginate(query, Order.class).next());
     }
 
     @Async
     @PostMapping("/customers/{id}/cart")
     Future<Order> createCart(@PathVariable("id") String customerId) {
+        // Call our getOrCreateCart UDF to get the customer's cart. The function
+        // definition can be found 'server/schema/functions.fsl'.
         Map<String, Object> args = Map.of("customerId", customerId, "response", response);
-
         Query query = fql("""
                 let order: Any = getOrCreateCart(${customerId})
                 
                 // Return the cart.
                 ${response}
                 """, args);
+
+        // Connect to fauna using the client. The query method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Order.class to specify that the query will return a single
+        // item representing an Order.
         return client.asyncQuery(query, Order.class).thenApply(QuerySuccess::getData);
     }
 
     @Async
     @PostMapping("/customers/{id}/cart/item")
     Future<Order> addToCart(@PathVariable("id") String customerId, @RequestBody OrderItem req) {
+
+        // Call our createOrUpdateCartItem UDF to add an item to the customer's cart. The function
+        // definition can be found 'server/schema/functions.fsl'.
         Map<String, Object> args = Map.of("customerId", customerId, "req", req, "response", response);
         Query query = fql("""
                 let req = ${req}
@@ -194,12 +222,20 @@ public class OrdersController {
                 // Return the cart as an OrderResponse object.
                 ${response}
                 """, args);
+
+        // Connect to fauna using the client. The query method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Order.class to specify that the query will return a single
+        // item representing an Order.
         return client.asyncQuery(query, Order.class).thenApply(QuerySuccess::getData);
     }
 
     @Async
     @GetMapping("/customers/{id}/cart")
     Future<Order> getCart(@PathVariable("id") String customerId) {
+
+        // Get the customer's cart by id, using the ! operator to assert that the document exists.
+        // If the document does not exist, Fauna will throw a document_not_found error.
         Map<String, Object> args = Map.of("customerId", customerId, "response", response);
         Query query = fql("""
                 let order: Any = Customer.byId(${customerId})!.cart
@@ -208,6 +244,10 @@ public class OrdersController {
                 ${response}
                 """, args);
 
+        // Connect to fauna using the client. The query method accepts an FQL query
+        // as a parameter as well as an optional return type. In this case, we are
+        // using the Order.class to specify that the query will return a single
+        // item representing an Order.
         return client.asyncQuery(query, Order.class).thenApply(QuerySuccess::getData);
     }
 }

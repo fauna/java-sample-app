@@ -46,8 +46,7 @@ public class CustomersController {
         Map<String,Object> args = Map.of("id", id, "response", response);
 
         // Get the Customer document by `id`, using the ! operator to assert that the document exists.
-        // If the document does not exist, Fauna will throw a document_not_found error which in turn
-        // will throw a NullDocumentException.
+        // If the document does not exist, Fauna will throw a document_not_found error.
         //
         // Use projection to only return the fields you need.
         Query query = fql("""
@@ -91,8 +90,7 @@ public class CustomersController {
         Map<String,Object> args = Map.of("id", id, "info", info, "response", response);
 
         // Get the Customer document by `id`, using the ! operator to assert that the document exists.
-        // If the document does not exist, Fauna will throw a document_not_found error which in turn
-        // will throw a NullDocumentException.
+        // If the document does not exist, Fauna will throw a document_not_found error.
         //
         // All unannotated fields and fields annotated with @FaunaField will be serialized, including
         // those with `null` values. When an update is made to a field with a null value, that value of
