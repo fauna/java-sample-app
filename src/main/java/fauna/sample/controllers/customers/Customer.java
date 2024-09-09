@@ -1,5 +1,6 @@
 package fauna.sample.controllers.customers;
 
+import com.fauna.annotation.FaunaField;
 import com.fauna.annotation.FaunaId;
 import fauna.sample.controllers.orders.Order;
 
@@ -16,15 +17,16 @@ public class Customer extends CustomerInfo {
 
     // Fauna object and document fields will be matched to class fields by default, but
     // you can override the name with @FaunaField( name = "my_name" )
-    private Order cart;
+    @FaunaField( name = "cart")
+    private Order orderCart;
     private List<Order> orders;
 
     public String getId() {
         return id;
     }
 
-    public Order getCart() {
-        return cart;
+    public Order getOrderCart() {
+        return orderCart;
     }
 
     public List<Order> getOrders() {

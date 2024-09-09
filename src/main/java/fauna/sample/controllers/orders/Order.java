@@ -41,6 +41,12 @@ public class Order {
     }
 
     public static class Item {
+
+        // Add @FaunaId attribute to indicate that it's an ID on a document. This tells
+        // the codec library to ignore this during encoding.
+        //
+        // To use client-generated IDs, use @FaunaId( isClientGenerate = true), which will
+        // tell the codec library to encode it if it is not null.
         @FaunaId
         private String id;
         private Order order;
@@ -64,6 +70,11 @@ public class Order {
         }
     }
 
+    // Add @FaunaId attribute to indicate that it's an ID on a document. This tells
+    // the codec library to ignore this during encoding.
+    //
+    // To use client-generated IDs, use @FaunaId( isClientGenerate = true), which will
+    // tell the codec library to encode it if it is not null.
     @FaunaId
     private String id;
     private Instant createdAt;

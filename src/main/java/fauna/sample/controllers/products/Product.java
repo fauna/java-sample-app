@@ -5,6 +5,12 @@ import com.fauna.annotation.FaunaId;
 public class Product {
 
     public static class Category {
+
+        // Add @FaunaId attribute to indicate that it's an ID on a document. This tells
+        // the codec library to ignore this during encoding.
+        //
+        // To use client-generated IDs, use @FaunaId( isClientGenerate = true), which will
+        // tell the codec library to encode it if it is not null.
         @FaunaId
         private String id;
         private String name;
@@ -23,6 +29,11 @@ public class Product {
         }
     }
 
+    // Add @FaunaId attribute to indicate that it's an ID on a document. This tells
+    // the codec library to ignore this during encoding.
+    //
+    // To use client-generated IDs, use @FaunaId( isClientGenerate = true), which will
+    // tell the codec library to encode it if it is not null.
     @FaunaId
     private String id;
     private String name;
