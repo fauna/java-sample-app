@@ -323,6 +323,6 @@ Customer documents and related API responses:
       "id": "999",
       "cart": null,
       "orders": null,
-      "totalPurchaseAmt": 0
+      "totalPurchaseAmt": 3600
     }
     ```
