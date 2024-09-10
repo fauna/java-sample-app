@@ -129,20 +129,20 @@ public class OrdersController {
             query = fql("""
                 let order: Any = Order.byId(${id})!
                 let req = ${req}
-                
+
                 // Validate the order status transition if a status is provided.
                 if (req.status != null) {
                   validateOrderStatusTransition(order!.status, req.status)
                 }
-                
+
                 // If the order status is not "cart" and a payment is provided, throw an error.
                 if (order!.status != "cart" && req.payment != null) {
                   abort("Can not update payment information after an order has been placed.")
                 }
-                
+
                 // Update the order with the new status and payment information.
                 order.update(req)
-                
+
                 // Return the order.
                 ${response}
                 """, args);
@@ -174,7 +174,7 @@ public class OrdersController {
                 let customer: Any = Customer.byId(${customerId})!
                 Order.byCustomer(customer).pageSize(${pageSize}).map((order) => {
                   let order: Any = order
-               
+
                   // Return the order.
                   ${response}
                 })
@@ -196,7 +196,7 @@ public class OrdersController {
         Map<String, Object> args = Map.of("customerId", customerId, "response", response);
         Query query = fql("""
                 let order: Any = getOrCreateCart(${customerId})
-                
+
                 // Return the cart.
                 ${response}
                 """, args);
@@ -210,15 +210,15 @@ public class OrdersController {
 
     @Async
     @PostMapping("/customers/{id}/cart/item")
-    Future<Order> addToCart(@PathVariable("id") String customerId, @RequestBody OrderItem req) {
+    Future<Order> addToCart(@PathVariable("id") String customerId, @RequestBody AddToCartRequest req) {
 
         // Call our createOrUpdateCartItem UDF to add an item to the customer's cart. The function
         // definition can be found 'server/schema/functions.fsl'.
         Map<String, Object> args = Map.of("customerId", customerId, "req", req, "response", response);
         Query query = fql("""
                 let req = ${req}
-                let order: Any = createOrUpdateCartItem(${customerId}, req.product.name, req.quantity)
-                
+                let order: Any = createOrUpdateCartItem(${customerId}, req.productName, req.quantity)
+
                 // Return the cart as an OrderResponse object.
                 ${response}
                 """, args);
@@ -239,7 +239,7 @@ public class OrdersController {
         Map<String, Object> args = Map.of("customerId", customerId, "response", response);
         Query query = fql("""
                 let order: Any = Customer.byId(${customerId})!.cart
-                
+
                 // Return the cart as an OrderResponse object.
                 ${response}
                 """, args);
