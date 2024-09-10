@@ -134,6 +134,7 @@ public class ProductsController {
     @Async
     @PostMapping("/products/{id}")
     Future<Product> update(@PathVariable String id, @RequestBody ProductRequest req) {
+        Map<String, Object> args = Map.of("req", req, "id", id);
 
         Query query = fql("""
                           let input = ${req};
@@ -144,10 +145,10 @@ public class ProductsController {
 
                           // Get the category by name. We can use .first() here because we know that the category
                           // name is unique.
-                          let category = Category.byName(intput.category).first()
+                          let category = Category.byName(input.category ?? "").first()
 
                           // If a category was provided and it does not exist, abort the transaction.
-                          if (${!!category} && category == null) abort("Category does not exist.")
+                          if (input.category != null && category == null) abort("Category does not exist.")
 
                           let fields = { name: input.name, price: input.price, stock: input.stock, description: input.description }
 
@@ -173,7 +174,7 @@ public class ProductsController {
                               description
                             }
                           }
-                """);
+                """, args);
 
 
         // Connect to fauna using the client. The query method accepts an FQL query
