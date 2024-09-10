@@ -22,34 +22,6 @@ import static com.fauna.query.builder.Query.fql;
 @RestController
 public class ProductsController {
 
-    public static class ProductRequest {
-        private String name;
-        private String description;
-        private Integer price;
-        private Integer stock;
-        private Product.Category category;
-
-        public String getName() {
-            return name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public Integer getPrice() {
-            return price;
-        }
-
-        public Integer getStock() {
-            return stock;
-        }
-
-        public Product.Category getCategory() {
-            return category;
-        }
-    }
-
     private final FaunaClient client;
 
     @Autowired
@@ -125,7 +97,7 @@ public class ProductsController {
         // fauna will throw an AbortError which we can handle in our catch block.
         Query query = fql("""
                   let input = ${req};
-                  
+
                   // Get the category by name. We can use .first() here because we know that the category
                   // name is unique.
                   let category = Category.byName(input.category).first()
@@ -169,16 +141,16 @@ public class ProductsController {
                           // Get the product by id, using the ! operator to assert that the product exists.
                           // If it does not exist Fauna will throw a document_not_found error.
                           let product: Any = Product.byId(${id})!
-                          
+
                           // Get the category by name. We can use .first() here because we know that the category
                           // name is unique.
                           let category = Category.byName(intput.category).first()
-                          
+
                           // If a category was provided and it does not exist, abort the transaction.
                           if (${!!category} && category == null) abort("Category does not exist.")
-                          
+
                           let fields = { name: input.name, price: input.price, stock: input.stock, description: input.description }
-                          
+
                           if (category != null) {
                             // If a category was provided, update the product with the new category document as well as
                             // any other fields that were provided.
@@ -187,7 +159,7 @@ public class ProductsController {
                             // If no category was provided, update the product with the fields that were provided.
                             product!.update(fields)
                           }
-                                                    
+
                           // Use projection to only return the fields you need.
                           product {
                             id,
