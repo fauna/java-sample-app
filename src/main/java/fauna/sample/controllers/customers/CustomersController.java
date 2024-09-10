@@ -63,15 +63,15 @@ public class CustomersController {
 
     @Async
     @PostMapping("/customers")
-    Future<Customer> create(@RequestBody CustomerInfo info) {
+    Future<Customer> create(@RequestBody Customer customer) {
         // Build a map of args that match with the variables in the query. We pass
-        // a CustomerInfo variable, `info`, and another Query `response` as our args.
-        Map<String,Object> args = Map.of("info", info, "response", response);
+        // a Customer variable, `customer`, and another Query `response` as our args.
+        Map<String,Object> args = Map.of("customer", customer, "response", response);
 
         // Create a new Customer document with the provided fields.
         // Use projection to only return the fields you need.
         Query query = fql("""
-                let customer: Any = Customer.create(${info})
+                let customer: Any = Customer.create(${customer})
                 ${response}
                 """, args);
 
@@ -84,10 +84,10 @@ public class CustomersController {
 
     @Async
     @PostMapping("/customers/{id}")
-    Future<Customer> update(@PathVariable String id, @RequestBody CustomerInfo info) {
+    Future<Customer> update(@PathVariable String id, @RequestBody Customer customer) {
         // Build a map of args that match with the variables in the query. We pass
-        // a CustomerInfo variable, `info`, and another Query `response` as our args.
-        Map<String,Object> args = Map.of("id", id, "info", info, "response", response);
+        // a Customer variable, `customer`, and another Query `response` as our args.
+        Map<String,Object> args = Map.of("id", id, "customer", customer, "response", response);
 
         // Get the Customer document by `id`, using the ! operator to assert that the document exists.
         // If the document does not exist, Fauna will throw a document_not_found error.
@@ -99,7 +99,7 @@ public class CustomersController {
         //
         // Use projection to only return the fields you need.
         Query query = fql("""
-                let customer: Any = Customer.byId(${id})!.update(${info})
+                let customer: Any = Customer.byId(${id})!.update(${customer})
                 ${response}
                 """, args);
 
