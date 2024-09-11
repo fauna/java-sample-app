@@ -82,7 +82,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
 
 ## Setup
 
-1. In your terminal, clone the repo and navigate to the `js-sample-app`
+1. In your terminal, clone the repo and navigate to the `java-sample-app`
    directory. For example:
 
     ```sh
