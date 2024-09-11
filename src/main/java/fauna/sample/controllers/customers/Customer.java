@@ -1,12 +1,10 @@
 package fauna.sample.controllers.customers;
 
-import com.fauna.annotation.FaunaField;
 import com.fauna.annotation.FaunaId;
-import fauna.sample.controllers.orders.Order;
 
 import java.util.List;
 
-public class Customer extends CustomerInfo {
+public class Customer {
     // Add @FaunaId attribute to indicate that it's an ID on a document. This tells
     // the codec library to ignore this during encoding.
     //
@@ -15,21 +13,52 @@ public class Customer extends CustomerInfo {
     @FaunaId
     private String id;
 
-    // Fauna object and document fields will be matched to class fields by default, but
-    // you can override the name with @FaunaField( name = "my_name" )
-    @FaunaField( name = "cart")
-    private Order orderCart;
-    private List<Order> orders;
+    private String name;
+    private String email;
+    private Address address;
 
     public String getId() {
         return id;
     }
 
-    public Order getOrderCart() {
-        return orderCart;
+    public String getName() {
+        return name;
     }
 
-    public List<Order> getOrders() {
-        return orders;
+    public String getEmail() {
+        return email;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public static class Address {
+        private String street;
+        private String city;
+        private String state;
+        private String postalCode;
+        private String country;
+
+
+        public String getStreet() {
+            return street;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public String getPostalCode() {
+            return postalCode;
+        }
+
+        public String getCountry() {
+            return country;
+        }
     }
 }

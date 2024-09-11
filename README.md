@@ -190,7 +190,7 @@ curl -v \
     "name": "The Old Man and the Sea",
     "price": 899,
     "description": "A book by Ernest Hemingway",
-    "stock": 10,
+    "stockQuantity": 10,
     "category": "books"
   }' | jq .
 ```
@@ -249,7 +249,7 @@ Customer documents and related API responses:
                 id,
                 name,
                 email,
-                address,
+    +           address,
     +           totalPurchaseAmt
               }
             """);
@@ -266,26 +266,16 @@ Customer documents and related API responses:
    to the `Customer` class:
 
     ```diff
-        private Order cart;
-        private List<Order> orders;
+    private String email;
+    private Address address;
+    + private int totalPurchaseAmt;
+    +
+    + public int getTotalPurchaseAmt() {
+    +     return totalPurchaseAmt;
+    + }
 
-    +   private int totalPurchaseAmt;
-
-        public String getId() {
-            return id;
-        }
-
-        public Order getCart() {
-            return cart;
-        }
-
-        public List<Order> getOrders() {
-            return orders;
-        }
-
-    +   public int getTotalPurchaseAmt() {
-    +       return totalPurchaseAmt;
-    +   }
+    public String getId() {
+        return id;
     }
     ```
 
@@ -311,6 +301,7 @@ Customer documents and related API responses:
 
     ```json
     {
+      "id": "999",
       "name": "Valued Customer",
       "email": "fake@fauna.com",
       "address": {
@@ -320,9 +311,6 @@ Customer documents and related API responses:
         "postalCode": "1015BT",
         "country": "Netherlands"
       },
-      "id": "999",
-      "cart": null,
-      "orders": null,
-      "totalPurchaseAmt": 3600
+      "totalPurchaseAmt": 36000
     }
     ```
