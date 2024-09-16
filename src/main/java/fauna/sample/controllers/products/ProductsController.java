@@ -18,7 +18,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.logging.Logger;
 
 import static com.fauna.query.builder.Query.fql;
 
@@ -26,8 +25,6 @@ import static com.fauna.query.builder.Query.fql;
 public class ProductsController {
 
     private final FaunaClient client;
-
-    private static final Logger logger = Logger.getLogger(ProductsController.class.getName());
 
     @Autowired
     public ProductsController(FaunaClient client) {
@@ -47,9 +44,6 @@ public class ProductsController {
         if (afterToken != null) {
             // Decode the afterToken (equivalent to decodeURIComponent) without needing a try-catch block
             String decodedAfterToken = URLDecoder.decode(afterToken, StandardCharsets.UTF_8);
-
-            // Log the decoded afterToken
-            logger.info("Decoded afterToken: " + decodedAfterToken);
 
             // Use the decoded afterToken in your query
             query = fql("Set.paginate(${afterToken})", Map.of("afterToken", decodedAfterToken));
