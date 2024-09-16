@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 
 import static com.fauna.query.builder.Query.fql;
 
@@ -162,10 +160,11 @@ public class OrdersController {
     Future<Page<Order>> getByCustomer(@PathVariable("id") String customerId, @RequestParam(required = false) String afterToken, @RequestParam(required = false) Integer pageSize) {
         Query query;
         if (afterToken != null) {
-            // Decode the afterToken (equivalent to decodeURIComponent) without needing a try-catch block
-            String decodedAfterToken = URLDecoder.decode(afterToken, StandardCharsets.UTF_8);
-            // Use the decoded afterToken in your query
-            query = fql("Set.paginate(${afterToken})", Map.of("afterToken", decodedAfterToken));
+            /**
+             * Fauna after token may contain special characters (i.e.+, -,&). 
+             * Make sure to encode your URL properly from the client side when calling this API
+             */
+            query = fql("Set.paginate(${afterToken})", Map.of("afterToken", afterToken));
         } else {
             pageSize = pageSize != null ? pageSize : 10;
 
