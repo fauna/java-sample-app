@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 
 import static com.fauna.query.builder.Query.fql;
 
@@ -23,6 +26,8 @@ import static com.fauna.query.builder.Query.fql;
 public class ProductsController {
 
     private final FaunaClient client;
+
+    private static final Logger logger = Logger.getLogger(ProductsController.class.getName());
 
     @Autowired
     public ProductsController(FaunaClient client) {
@@ -40,7 +45,14 @@ public class ProductsController {
         pageSize = pageSize != null ? pageSize : 10;
 
         if (afterToken != null) {
-            query = fql("Set.paginate(${afterToken})", Map.of("afterToken", afterToken));
+            // Decode the afterToken (equivalent to decodeURIComponent) without needing a try-catch block
+            String decodedAfterToken = URLDecoder.decode(afterToken, StandardCharsets.UTF_8);
+
+            // Log the decoded afterToken
+            logger.info("Decoded afterToken: " + decodedAfterToken);
+
+            // Use the decoded afterToken in your query
+            query = fql("Set.paginate(${afterToken})", Map.of("afterToken", decodedAfterToken));
         } else {
 
             // Define an FQL query fragment that will return a page of products. This query

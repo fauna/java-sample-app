@@ -17,11 +17,17 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 
 import static com.fauna.query.builder.Query.fql;
 
 @RestController
 public class OrdersController {
+
+    // Initialize the logger
+    private static final Logger logger = Logger.getLogger(OrdersController.class.getName());
 
     public static class OrderUpdate {
         private Order.Status status;
@@ -160,7 +166,14 @@ public class OrdersController {
     Future<Page<Order>> getByCustomer(@PathVariable("id") String customerId, @RequestParam(required = false) String afterToken, @RequestParam(required = false) Integer pageSize) {
         Query query;
         if (afterToken != null) {
-            query = fql("Set.paginate(${afterToken})", Map.of("afterToken", afterToken));
+            // Decode the afterToken (equivalent to decodeURIComponent) without needing a try-catch block
+            String decodedAfterToken = URLDecoder.decode(afterToken, StandardCharsets.UTF_8);
+
+            // Log the decoded afterToken
+            logger.info("Decoded afterToken: " + decodedAfterToken);
+
+            // Use the decoded afterToken in your query
+            query = fql("Set.paginate(${afterToken})", Map.of("afterToken", decodedAfterToken));
         } else {
             pageSize = pageSize != null ? pageSize : 10;
 
