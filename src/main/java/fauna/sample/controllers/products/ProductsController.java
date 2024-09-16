@@ -40,6 +40,12 @@ public class ProductsController {
         pageSize = pageSize != null ? pageSize : 10;
 
         if (afterToken != null) {
+            /**
+             * The `afterToken` parameter contains a Fauna `after` cursor.
+             * `after` cursors may contain special characters, such as `.` or `+`). 
+             * Make sure to URL encode the `afterToken` value to preserve these
+             * characters in URLs.
+             */
             query = fql("Set.paginate(${afterToken})", Map.of("afterToken", afterToken));
         } else {
 

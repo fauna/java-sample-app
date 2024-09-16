@@ -159,7 +159,7 @@ The app runs an HTTP API server. From the root directory, run:
 FAUNA_SECRET=<secret> ./gradlew bootRun
 ```
 
-Once started, the local server is available at http://localhost:8000.
+Once started, the local server is available at http://localhost:8080.
 
 
 ## HTTP API endpoints

@@ -160,6 +160,12 @@ public class OrdersController {
     Future<Page<Order>> getByCustomer(@PathVariable("id") String customerId, @RequestParam(required = false) String afterToken, @RequestParam(required = false) Integer pageSize) {
         Query query;
         if (afterToken != null) {
+            /**
+             * The `afterToken` parameter contains a Fauna `after` cursor.
+             * `after` cursors may contain special characters, such as `.` or `+`). 
+             * Make sure to URL encode the `afterToken` value to preserve these
+             * characters in URLs.
+             */
             query = fql("Set.paginate(${afterToken})", Map.of("afterToken", afterToken));
         } else {
             pageSize = pageSize != null ? pageSize : 10;
