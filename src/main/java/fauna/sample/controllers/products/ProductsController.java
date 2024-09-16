@@ -41,8 +41,10 @@ public class ProductsController {
 
         if (afterToken != null) {
             /**
-             * Fauna after token may contain special characters (i.e.+, -,&). 
-             * Make sure to encode your URL properly from the client side when calling this API
+             * The `afterToken` parameter contains a Fauna `after` cursor.
+             * `after` cursors may contain special characters, such as `.` or `+`). 
+             * Make sure to URL encode the `afterToken` value to preserve these
+             * characters in URLs.
              */
             query = fql("Set.paginate(${afterToken})", Map.of("afterToken", afterToken));
         } else {
