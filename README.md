@@ -82,8 +82,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
 
 ## Setup
 
-1. In your terminal, clone the repo and navigate to the `java-sample-app`
-   directory. For example:
+1. Clone the repo and navigate to the `java-sample-app` directory:
 
     ```sh
     git clone git@github.com:fauna/java-sample-app.git
@@ -105,6 +104,15 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     fauna cloud-login
     ```
 
+  When prompted, enter:
+
+    * **Endpoint name:** `cloud` (Press Enter)
+    * **Email address:** The email address for your Fauna account.
+    * **Password:** The password for your Fauna account.
+    * **Which endpoint would you like to set as default?** The `cloud-*`
+      endpoint for your preferred region group. For example, to use the US
+      region group, use `cloud-us`.
+
    The command requires an email and password login. If you log in to the Fauna
    using GitHub or Netlify, you can enable email and password login using the
    [Forgot Password](https://dashboard.fauna.com/forgot-password) workflow.
@@ -116,7 +124,23 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     fauna create-database --environment='' ECommerceJava
     ```
 
-4.  Push the FSL files in the `schema` directory to the `ECommerceJava`
+
+4. Create a
+   [`.fauna-project`](https://docs.fauna.com/fauna/current/tools/shell/#proj-config)
+   config file for the project:
+
+   ```sh
+   fauna project init
+   ```
+
+   When prompted, enter:
+
+    * `schema` as the schema directory.
+    * `dev` as the environment name.
+    * The default endpoint.
+    * `ECommerce` as the database.
+
+5.  Push the FSL files in the `schema` directory to the `ECommerceJava`
     database:
 
     ```sh
@@ -127,7 +151,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     and user-defined functions (UDFs) defined in the FSL files of the
     `schema` directory.
 
-5. Create a key with the `server` role for the `ECommerceJava` database:
+6. Create a key with the `server` role for the `ECommerceJava` database:
 
     ```sh
     fauna create-key --environment='' ECommerceJava server
@@ -138,16 +162,14 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
 
 ## Add sample data
 
-The app includes tests that check the app's API endpoints and create related documents
-in the `ECommerceJava` database.
-
-From the root directory, run:
+The app includes a setup script that adds sample documents to the
+`ECommerceJava` database. From the root directory, run:
 
 ```sh
 FAUNA_SECRET=<secret> ./setup.sh
 ```
 
-You can view documents created by the tests in the [Fauna
+You can view documents created by the script in the [Fauna
 Dashboard](https://dashboard.fauna.com/).
 
 
