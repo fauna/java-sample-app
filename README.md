@@ -117,13 +117,11 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
    using GitHub or Netlify, you can enable email and password login using the
    [Forgot Password](https://dashboard.fauna.com/forgot-password) workflow.
 
-
 3. Use the Fauna CLI to create the `ECommerceJava` database:
 
     ```sh
     fauna create-database --environment='' ECommerceJava
     ```
-
 
 4. Create a
    [`.fauna-project`](https://docs.fauna.com/fauna/current/tools/shell/#proj-config)
@@ -144,12 +142,12 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     database:
 
     ```sh
-    fauna schema push
+    fauna schema push --active
     ```
 
     When prompted, accept and push the changes. The push creates the collections
-    and user-defined functions (UDFs) defined in the FSL files of the
-    `schema` directory.
+    and user-defined functions (UDFs) defined in the FSL files of the `schema`
+    directory.
 
 6. Create a key with the `server` role for the `ECommerceJava` database:
 
@@ -258,7 +256,7 @@ Customer documents and related API responses:
 3.  Push the updated schema to the `ECommerceJava` database:
 
     ```sh
-    fauna schema push
+    fauna schema push --active
     ```
 
 4. In `CustomersController.java`, add the
