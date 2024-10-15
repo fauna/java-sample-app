@@ -117,13 +117,11 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
    using GitHub or Netlify, you can enable email and password login using the
    [Forgot Password](https://dashboard.fauna.com/forgot-password) workflow.
 
-
 3. Use the Fauna CLI to create the `ECommerceJava` database:
 
     ```sh
     fauna create-database --environment='' ECommerceJava
     ```
-
 
 4. Create a
    [`.fauna-project`](https://docs.fauna.com/fauna/current/tools/shell/#proj-config)
@@ -140,18 +138,32 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     * The default endpoint.
     * `ECommerce` as the database.
 
-5.  Push the FSL files in the `schema` directory to the `ECommerceJava`
+5.  Push the `.fsl` files in the `schema` directory to the `ECommerceJava`
     database:
 
     ```sh
     fauna schema push
     ```
 
-    When prompted, accept and push the changes. The push creates the collections
-    and user-defined functions (UDFs) defined in the FSL files of the
+    When prompted, accept and stage the schema.
+
+6.  Check the status of the staged schema:
+
+    ```sh
+    fauna schema status
+    ```
+
+7.  When the status is `ready`, commit the staged schema to the database:
+
+    ```sh
+    fauna schema commit
+    ```
+
+    The commit applies the staged schema to the database. The commit creates the
+    collections and user-defined functions (UDFs) defined in the `.fsl` files of the
     `schema` directory.
 
-6. Create a key with the `server` role for the `ECommerceJava` database:
+8. Create a key with the `server` role for the `ECommerceJava` database:
 
     ```sh
     fauna create-key --environment='' ECommerceJava server
@@ -255,13 +267,28 @@ Customer documents and related API responses:
 
    Save `schema/collections.fsl`.
 
-3.  Push the updated schema to the `ECommerceJava` database:
+3.  Push the updated `.fsl` files in the `schema` directory to the `ECommerceJava`
+    database to stage the changes:
 
     ```sh
     fauna schema push
     ```
 
-4. In `CustomersController.java`, add the
+    When prompted, accept and stage the schema.
+
+4.  Check the status of the staged schema:
+    ```sh
+    fauna schema status
+    ```
+
+5.  When the status is `ready`, commit the staged schema changes to the
+    database:
+
+    ```sh
+    fauna schema commit
+    ```
+
+6. In `CustomersController.java`, add the
    `totalPurchaseAmt` field to the `response` FQL template:
 
     ```diff
@@ -283,7 +310,7 @@ Customer documents and related API responses:
    Customer-related endpoints use this template to project Customer
    document fields in responses.
 
-5. In `Customer.java`, add the
+7. In `Customer.java`, add the
    `totalPurchaseAmt` field and a related getter
    to the `Customer` class:
 
@@ -306,20 +333,20 @@ Customer documents and related API responses:
    Customer-related endpoints return responses that
    conform to the `Customer` class.
 
-6. Start the app server:
+8. Start the app server:
 
     ```sh
     FAUNA_SECRET=<secret> ./gradlew bootRun
     ```
 
-7. With the local server running in a separate terminal tab, run the
-   following curl request to the `POST /customers` endpoint:
+9.  With the local server running in a separate terminal tab, run the
+    following curl request to the `POST /customers` endpoint:
 
     ```sh
     curl -v http://localhost:8080/customers/999 | jq .
     ```
 
-   The response includes the computed `totalPurchaseAmt` field:
+    The response includes the computed `totalPurchaseAmt` field:
 
     ```json
     {
