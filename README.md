@@ -120,7 +120,7 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
 3. Use the Fauna CLI to create the `ECommerceJava` database:
 
     ```sh
-    fauna create-database --environment='' ECommerceJava
+    fauna create-database ECommerceJava
     ```
 
 4. Create a
