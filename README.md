@@ -68,11 +68,12 @@ To run the app, you'll need:
 
 - Your preferred flavor of Java 17
 
-- The [Fauna CLI](https://docs.fauna.com/fauna/current/tools/shell/). To install
-  the CLI, run:
+- [Fauna CLI](https://docs.fauna.com/fauna/current/tools/shell/) v3.0.0 or later.
+
+  To install the CLI, run:
 
     ```sh
-    npm install -g fauna-shell
+    npm install -g fauna-shell@latest
     ```
 
 You should also be familiar with basic Fauna CLI commands and usage. For an
@@ -89,33 +90,24 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     cd java-sample-app
     ```
 
-   The repo includes a
-   [`.fauna-project`](https://docs.fauna.com/fauna/current/tools/shell/#proj-config)
-   file that contains defaults for the Fauna CLI. The file indicates:
-
-    - `ECommerceJava` is the default database for the project.
-
-    - The project stores Fauna Schema Language (FSL) files in the
-      `schema` directory.
-
 2. Log in to Fauna using the Fauna CLI:
 
     ```sh
     fauna cloud-login
     ```
 
-  When prompted, enter:
+    When prompted, enter:
 
-    * **Endpoint name:** `cloud` (Press Enter)
-    * **Email address:** The email address for your Fauna account.
-    * **Password:** The password for your Fauna account.
-    * **Which endpoint would you like to set as default?** The `cloud-*`
-      endpoint for your preferred region group. For example, to use the US
-      region group, use `cloud-us`.
+     * **Endpoint name:** `cloud` (Press Enter)
+     * **Email address:** The email address for your Fauna account.
+     * **Password:** The password for your Fauna account.
+     * **Which endpoint would you like to set as default?** The `cloud-*`
+       endpoint for your preferred region group. For example, to use the US
+       region group, use `cloud-us`.
 
-   The command requires an email and password login. If you log in to the Fauna
-   using GitHub or Netlify, you can enable email and password login using the
-   [Forgot Password](https://dashboard.fauna.com/forgot-password) workflow.
+    The command requires an email and password login. If you log in to the Fauna
+    using GitHub or Netlify, you can enable email and password login using the
+    [Forgot Password](https://dashboard.fauna.com/forgot-password) workflow.
 
 3. Use the Fauna CLI to create the `ECommerceJava` database:
 
