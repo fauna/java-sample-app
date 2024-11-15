@@ -4,25 +4,25 @@ on:
   pull_request:
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
-  services:
-    fauna:
-      image: fauna/faunadb
-      ports:
-        - 8443:8443
-  steps:
-    - name: Check out repository
-      uses: actions/checkout@v4
+    services:
+      fauna:
+        image: fauna/faunadb
+        ports:
+          - 8443:8443
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-    - name: Set up JDK
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: corretto
-    - name: Install fauna-shell
-      run:
-        npm install fauna-shell
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: corretto
+      - name: Install fauna-shell
+        run:
+          npm install fauna-shell
 
-    - name: Run sample app
-      run: ./gradlew build
+      - name: Run sample app
+        run: ./gradlew build
