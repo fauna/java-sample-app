@@ -20,6 +20,9 @@ jobs:
       with:
         java-version: '17'
         distribution: corretto
+    - name: Install fauna-shell
+      run:
+        npm install fauna-shell
 
     - name: Run sample app
       run: ./gradlew build
