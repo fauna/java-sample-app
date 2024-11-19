@@ -23,6 +23,8 @@ jobs:
       - name: Install fauna-shell
         run:
           npm install fauna-shell
+      - name: Setup Test Database
+        run: ./setup.sh
 
       - name: Run sample app
         run: ./gradlew build
