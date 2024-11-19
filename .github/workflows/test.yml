@@ -20,6 +20,8 @@ jobs:
       with:
         java-version: '17'
         distribution: corretto
+    - name: Setup Test Database
+      run: ./setup.sh
 
     - name: Run sample app
       run: ./gradlew build
