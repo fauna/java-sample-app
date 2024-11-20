@@ -13,4 +13,6 @@ echo "Added local endpoint"
 /usr/local/bin/fauna endpoint select local
 echo "Selected local endpoint"
 
-/usr/local/bin/fauna create-database "$DB_NAME"
+fauna create-database "$DB_NAME"
+
+echo "Created database"
