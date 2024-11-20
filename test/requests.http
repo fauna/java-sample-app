@@ -1,0 +1,423 @@
+### List Products
+GET {{host}}/products?pageSize=1
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response contains products", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["data"][0]["name"] != "", "Must have a name");
+        client.assert(jsonData["data"][0]["description"] != "", "Must have a description");
+        client.global.set("productId", jsonData["data"][0]["id"]);
+        client.global.set("afterToken", encodeURIComponent(jsonData["after"]));
+    });
+%}
+
+### Paginate Products
+GET {{host}}/products?pageSize=1&afterToken={{afterToken}}
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response contains products", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["data"][0]["name"] != "", "Must have a name");
+        client.assert(jsonData["data"][0]["description"] != "", "Must have a description");
+        client.global.set("afterToken", encodeURIComponent(jsonData["after"]));
+    });
+%}
+
+### List Product Categories
+GET {{host}}/products/categories
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response contains products", function() {
+        let jsonData = response.body;
+        let count = jsonData.length;
+        client.assert(count == 3, "Expected 3 categories, got " + count);
+    });
+%}
+
+### Search Products
+GET {{host}}/products/search?minPrice=1000&maxPrice=10000
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response contains products", function() {
+        let jsonData = response.body;
+        client.assert(jsonData != null, "Must have a product");
+        client.assert(jsonData["data"][0]["name"] != "", "Must have a name");
+        client.assert(jsonData["data"][0]["description"] != "", "Must have a description");
+    });
+%}
+
+### Create Product
+POST {{host}}/products
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Coolest toy",
+  "description": "All the cool kids have one.",
+  "category": "electronics",
+  "price": 9999,
+  "quantity": 99
+}
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response is a product", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["name"] != "", "Must have a name");
+        client.assert(jsonData["description"] != "", "Must have a description");
+        client.global.set("productId", jsonData["id"]);
+    });
+%}
+
+### Update Product
+POST {{host}}/products/{{productId}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Coolest toy",
+  "description": "All the cool kids have one.",
+  "category": "electronics",
+  "price": 9999,
+  "quantity": 1
+}
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response is a product", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["name"] != "", "Must have a name");
+        client.assert(jsonData["description"] != "", "Must have a description");
+    });
+%}
+
+### Delete Product
+DELETE {{host}}/products/{{productId}}
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 204", function() {
+        client.assert(response.status === 204, "Response status is not 200");
+    });
+%}
+
+### Create Customer
+POST {{host}}/customers
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Natasha Romanoff",
+  "email": "natasha.romanoff@avengers.com",
+  "address": {
+    "street": "Avengers Tower",
+    "city": "New York",
+    "state": "NY",
+    "postalCode": "10001",
+    "country": "USA"
+  }
+}
+
+> {%
+    client.test("Response status is 201", function() {
+        client.assert(response.status === 201, "Response status is not 201");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response is a Customer", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["name"] != "", "Must have a name");
+        client.assert(jsonData["email"] != "", "Must have an email");
+        client.global.set("customerId", jsonData["id"]);
+    });
+%}
+
+### Get Customer
+GET {{host}}/customers/{{customerId}}
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response is a Customer", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["name"] != "", "Must have a name");
+        client.assert(jsonData["email"] != "", "Must have an email");
+    });
+%}
+
+### Update Customer
+
+POST {{host}}/customers/{{customerId}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "Natasha Romanoff",
+  "email": "natasha.romanoff@avengers.com",
+  "address": {
+    "street": "Avengers Compound",
+    "city": "Schroon Lake",
+    "state": "NY",
+    "postalCode": "12866",
+    "country": "USA"
+  }
+}
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200, got " + response.status);
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response is a Customer", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["name"] != "", "Must have a name");
+        client.assert(jsonData["email"] != "", "Must have an email");
+        client.global.set("customerId", jsonData["id"]);
+    });
+%}
+
+### Get Customer Orders
+GET {{host}}/customers/{{customerId}}/orders
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    // client.test("Response contains orders", function() {
+    //     let jsonData = response.body;
+    //     client.assert(jsonData.length > 0, "Must have an order");
+    // });
+%}
+
+### Create Cart for Customer
+POST {{host}}/customers/{{customerId}}/cart
+Accept: application/json
+Content-Type: application/json
+
+{}
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response is a Cart", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["customerId"] != "", "Must have a customerId");
+        client.global.set("cartId", jsonData["id"]);
+    });
+%}
+
+
+### Get Order
+GET {{host}}/orders/{{cartId}}
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response is an Order", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["customerId"] != "", "Must have a customerId");
+    })
+%}
+
+### Add Item to Cart
+POST {{host}}/customers/{{customerId}}/cart/item
+Accept: application/json
+Content-Type: application/json
+
+{
+  "productName": "Raspberry Pi",
+  "quantity": 1
+}
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response is an Order", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["customerId"] != "", "Must have a customerId");
+    })
+%}
+
+
+### Get Cart
+GET {{host}}/customers/{{customerId}}/cart
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+        client.assert(response.contentType.mimeType == "application/json", "Response is not JSON");
+    });
+
+    client.test("Response is an Order", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["items"].length == 1, "Must have an item in the cart");
+    })
+%}
+
+### Update Order
+POST {{host}}/orders/{{cartId}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "status": "processing",
+  "payment": {
+    "type": "card",
+    "number": "4111111111111111",
+    "expMonth": "12",
+    "expYear": "2025",
+    "cvc": "123"
+  }
+}
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+    });
+
+    client.test("Response is an Order", function() {
+        let jsonData = response.body;
+        client.assert(jsonData["customerId"] != "", "Must have a customerId");
+    });
+%}
+
+### List Orders
+GET {{host}}/orders/list
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 200", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response is JSON", function() {
+    });
+%}
+
+### Delete Customer
+DELETE {{host}}/customers/{{customerId}}
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 204", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+    });
+%}
+
+### Reset
+POST {{host}}/reset
+Accept: application/json
+Content-Type: application/json
+
+> {%
+    client.test("Response status is 204", function() {
+        client.assert(response.status === 204, "Response status is not 204");
+    });
+%}

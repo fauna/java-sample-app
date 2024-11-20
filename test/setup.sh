@@ -8,7 +8,7 @@ cp ./test/local-project .fauna-project
 
 echo "Copied .fauna-project"
 
-/usr/local/bin/fauna endpoint add local --non-interactive --set-default --url "$LOCAL_ENDPOINT" --secret "$SECRET"
+/usr/local/bin/fauna endpoint add local -y --set-default --url "$LOCAL_ENDPOINT" --secret "$SECRET"
 echo "Added local endpoint"
 
 fauna create-database "$DB_NAME"
