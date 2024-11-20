@@ -16,8 +16,9 @@ fauna create-database "$DB_NAME"
 
 fauna environment add --name local --endpoint local --database $DB_NAME -y
 fauna environment select local
-fauna create-key --environment='' ECommerceJava server | grep "secret: " | sed 's/secret: //' | xargs > .fauna_key
+fauna eval "Key.create({ role: 'server' }).secret" | xargs > .fauna_key
 
+echo "Created key"
 fauna schema push -y
 
 OUTPUT="";
