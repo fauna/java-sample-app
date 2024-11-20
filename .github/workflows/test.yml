@@ -26,5 +26,7 @@ jobs:
       - name: Setup Test Database
         run: ./test/setup.sh
 
-      - name: Run sample app
-        run: ./gradlew build
+      - name: Test sample app
+        run: |
+          ./gradlew bootRun &
+          ./test/validate.sh
