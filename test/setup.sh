@@ -8,9 +8,22 @@ cp ./test/local-project .fauna-project
 
 echo "Copied .fauna-project"
 
-/usr/local/bin/fauna endpoint add local -y --set-default --url "$LOCAL_ENDPOINT" --secret "$SECRET"
+fauna endpoint add local -y --set-default --url "$LOCAL_ENDPOINT" --secret "$SECRET"
+
 echo "Added local endpoint"
 
 fauna create-database "$DB_NAME"
 
-echo "Created database"
+fauna environment add --name local --endpoint local --database $DB_NAME -y
+fauna environment select local
+fauna create-key --environment='' ECommerceJava server | grep "secret: " | sed 's/secret: //' | xargs > .fauna_key
+
+fauna schema push -y
+
+OUTPUT="";
+while [ `echo $OUTPUT | grep -c "Staged Status: ready"` = 0 ]; do
+  OUTPUT=`fauna schema status`;
+done
+
+fauna schema commit -y
+
