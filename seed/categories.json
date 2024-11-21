@@ -1,16 +1,13 @@
 [
   {
-    "id": 1,
     "name": "electronics",
     "description": "bargain electronics"
   },
   {
-    "id": 2,
     "name": "books",
     "description": "bargain books"
   },
   {
-    "id": 3,
     "name": "movies",
     "description": "bargain movies"
   }
