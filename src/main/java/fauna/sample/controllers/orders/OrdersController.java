@@ -93,7 +93,7 @@ public class OrdersController {
     Future<Order> get(@PathVariable String id) {
         var args = Map.of("id", id, "response", response);
         var q = fql("""
-                let order: Any = Order.byId(${id})!
+                let order = Order.byId(${id})!
                 ${response}
                 """, args);
 
@@ -118,7 +118,7 @@ public class OrdersController {
             // as the order status.
             query = fql("""
                 let req = ${req}
-                let order: Any = checkout(${id}, req.status, req.payment)
+                let order = checkout(${id}, req.status, req.payment)
                 ${response}
                 """, args);
         } else {
@@ -127,7 +127,7 @@ public class OrdersController {
             // error. We then use the validateOrderStatusTransition UDF to ensure that the order status transition
             // is valid. If the transition is not valid, the UDF will throw an abort error.
             query = fql("""
-                let order: Any = Order.byId(${id})!
+                let order = Order.byId(${id})!
                 let req = ${req}
 
                 // Validate the order status transition if a status is provided.
@@ -162,7 +162,7 @@ public class OrdersController {
         if (afterToken != null) {
             /**
              * The `afterToken` parameter contains a Fauna `after` cursor.
-             * `after` cursors may contain special characters, such as `.` or `+`). 
+             * `after` cursors may contain special characters, such as `.` or `+`).
              * Make sure to URL encode the `afterToken` value to preserve these
              * characters in URLs.
              */
@@ -177,10 +177,8 @@ public class OrdersController {
             // the results to return only the fields we care about.
             var args = Map.of("customerId", customerId,"pageSize", pageSize,"response", response);
             query = fql("""
-                let customer: Any = Customer.byId(${customerId})!
+                let customer = Customer.byId(${customerId})!
                 Order.byCustomer(customer).pageSize(${pageSize}).map((order) => {
-                  let order: Any = order
-
                   // Return the order.
                   ${response}
                 })
@@ -201,7 +199,7 @@ public class OrdersController {
         // definition can be found 'server/schema/functions.fsl'.
         Map<String, Object> args = Map.of("customerId", customerId, "response", response);
         Query query = fql("""
-                let order: Any = getOrCreateCart(${customerId})
+                let order = getOrCreateCart(${customerId})
 
                 // Return the cart.
                 ${response}
@@ -223,7 +221,7 @@ public class OrdersController {
         Map<String, Object> args = Map.of("customerId", customerId, "req", req, "response", response);
         Query query = fql("""
                 let req = ${req}
-                let order: Any = createOrUpdateCartItem(${customerId}, req.productName, req.quantity)
+                let order = createOrUpdateCartItem(${customerId}, req.productName, req.quantity)
 
                 // Return the cart as an OrderResponse object.
                 ${response}
@@ -244,7 +242,7 @@ public class OrdersController {
         // If the document does not exist, Fauna will throw a document_not_found error.
         Map<String, Object> args = Map.of("customerId", customerId, "response", response);
         Query query = fql("""
-                let order: Any = Customer.byId(${customerId})!.cart
+                let order = Customer.byId(${customerId})!.cart
 
                 // Return the cart as an OrderResponse object.
                 ${response}

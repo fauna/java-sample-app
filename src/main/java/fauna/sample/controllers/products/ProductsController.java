@@ -42,7 +42,7 @@ public class ProductsController {
         if (afterToken != null) {
             /**
              * The `afterToken` parameter contains a Fauna `after` cursor.
-             * `after` cursors may contain special characters, such as `.` or `+`). 
+             * `after` cursors may contain special characters, such as `.` or `+`).
              * Make sure to URL encode the `afterToken` value to preserve these
              * characters in URLs.
              */
@@ -73,14 +73,16 @@ public class ProductsController {
                     ${subQuery}
                       .map(product => {
                          let product: Any = product
-                         let category: Any = product.category
                          {
                            id: product.id,
                            name: product.name,
                            price: product.price,
                            description: product.description,
                            stock: product.stock,
-                           category: { id: category.id, name: category.name, description: category.description },
+                           category: {
+                            id: product.category.id,
+                            name: product.category.name,
+                            description: product.category.description },
                          }
                        })
                     """, Map.of("subQuery", subQuery));
@@ -113,7 +115,7 @@ public class ProductsController {
 
                   // Create the product with the given values.
                   let args = { name: input.name, price: input.price, stock: input.stock, description: input.description, category: category }
-                  let product: Any = Product.create(args)
+                  let product = Product.create(args)
 
                   // Use projection to only return the fields you need.
                   product {
@@ -147,7 +149,7 @@ public class ProductsController {
 
                           // Get the product by id, using the ! operator to assert that the product exists.
                           // If it does not exist Fauna will throw a document_not_found error.
-                          let product: Any = Product.byId(${id})!
+                          let product = Product.byId(${id})!
 
                           // Get the category by name. We can use .first() here because we know that the category
                           // name is unique.
@@ -217,7 +219,6 @@ public class ProductsController {
             query = fql("""
                 Product.sortedByPriceLowToHigh({ from: ${minPrice}, to: ${maxPrice}})
                 .pageSize(${pageSize}).map(product => {
-                    let product: Any = product
                     product {
                       id,
                       name,

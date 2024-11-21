@@ -2,16 +2,16 @@
   "query": "
     let customer = Customer.byEmail('fake@fauna.com').first()!\n
     let orders = ['cart', 'processing', 'shipped', 'delivered'].map(status => {\n
-      let order: Any = Order.byCustomer(customer).firstWhere(o => o.status == status)\n
+      let order = Order.byCustomer(customer).firstWhere(o => o.status == status)\n
       if (order == null) {\n
-        let newOrder: Any = Order.create({\n
+        let newOrder = Order.create({\n
           customer: customer,\n
           status: status,\n
           createdAt: Time.now(),\n
           payment: {}\n
         })\n
-        let product: Any = Product.byName('Drone').first()!\n
-        let orderItem: Any = OrderItem.create({ order: newOrder, product: product, quantity: 1 })\n
+        let product = Product.byName('Drone').first()!\n
+        let orderItem = OrderItem.create({ order: newOrder, product: product, quantity: 1 })\n
         orderItem\n
         newOrder\n
       } else {\n

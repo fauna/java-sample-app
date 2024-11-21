@@ -63,7 +63,7 @@
     'category': 'movies'
   }
 ].map(p => {\n
-  let existing: Any = Product.byName(p.name).first()\n
+  let existing = Product.byName(p.name).first()\n
   if (existing != null) {\n
     existing!.update({ stock: p.stock })\n
   } else {\n
