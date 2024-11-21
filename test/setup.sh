@@ -25,3 +25,8 @@ while [ `echo $OUTPUT | grep -c "Staged status: ready"` = 0 ]; do
 done
 
 fauna schema commit -y
+
+fauna import --collection Category --path seed/categories.json
+fauna import --collection Customer --path seed/customers.json
+fauna eval --file seed/products.fql
+fauna eval --file seed/orders.fql
