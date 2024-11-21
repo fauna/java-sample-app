@@ -28,6 +28,7 @@ jobs:
 
       - name: Test sample app
         run: |
-          FAUNA_ENDPOINT=http://localhost:8443 FAUNA_SECRET=`cat .fauna_key` ./gradlew bootRun 2>&1 > bootrun.log &
+          ./gradlew build
+          FAUNA_ENDPOINT=http://localhost:8443 FAUNA_SECRET=`cat .fauna_key` ./gradlew bootRun > bootrun.log 2>&1  &
           ./test/validate.sh
           cat bootrun.log
