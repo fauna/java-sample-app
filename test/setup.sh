@@ -17,14 +17,7 @@ fauna environment add --name local --endpoint local --database $DB_NAME -y
 fauna environment select local
 fauna eval "Key.create({ role: 'server' }).secret" | xargs > .fauna_key
 
-fauna schema push -y
-
-OUTPUT="";
-while [ `echo $OUTPUT | grep -c "Staged status: ready"` = 0 ]; do
-  OUTPUT=`fauna schema status`;
-done
-
-fauna schema commit -y
+fauna schema push -y --active
 
 fauna import --collection Category --path seed/categories.json
 fauna import --collection Customer --path seed/customers.json
