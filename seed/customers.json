@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Valued Customer",
+    "email": "fake@fauna.com",
+    "address": {
+      "street": "Herengracht",
+      "city": "Amsterdam",
+      "state": "North Holland",
+      "postalCode": "1015BT",
+      "country": "Netherlands"
+    }
+  }
+]

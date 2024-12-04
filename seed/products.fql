@@ -1,4 +1,4 @@
-{"query":"[
+[
   {
     'name': 'iPhone',
     'price': 10000,
@@ -62,17 +62,17 @@
     'stock': 10,
     'category': 'movies'
   }
-].map(p => {\n
-  let existing: Any = Product.byName(p.name).first()\n
-  if (existing != null) {\n
-    existing!.update({ stock: p.stock })\n
-  } else {\n
-    Product.create({\n
-      name: p.name,\n
-      price: p.price,\n
-      description: p.description,\n
-      stock: p.stock,\n
-      category: Category.byName(p.category).first()!\n
-    })\n
-  }\n
-}\n)"}
+].map(p => {
+  let existing: Any = Product.byName(p.name).first()
+  if (existing != null) {
+    existing!.update({ stock: p.stock })
+  } else {
+    Product.create({
+      name: p.name,
+      price: p.price,
+      description: p.description,
+      stock: p.stock,
+      category: Category.byName(p.category).first()!
+    })
+  }
+})
