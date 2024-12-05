@@ -50,7 +50,7 @@ public class CustomersController {
         //
         // Use projection to only return the fields you need.
         Query query = fql("""
-                let customer: Any = Customer.byId(${id})!
+                let customer = Customer.byId(${id})!
                 ${response}
                 """, args);
 
@@ -71,7 +71,7 @@ public class CustomersController {
         // Create a new Customer document with the provided fields.
         // Use projection to only return the fields you need.
         Query query = fql("""
-                let customer: Any = Customer.create(${customer})
+                let customer = Customer.create(${customer})
                 ${response}
                 """, args);
 
@@ -99,7 +99,7 @@ public class CustomersController {
         //
         // Use projection to only return the fields you need.
         Query query = fql("""
-                let customer: Any = Customer.byId(${id})!.update(${customer})
+                let customer = Customer.byId(${id})!.update(${customer})
                 ${response}
                 """, args);
 
