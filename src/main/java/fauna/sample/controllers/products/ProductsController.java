@@ -1,6 +1,7 @@
 package fauna.sample.controllers.products;
 
 import com.fauna.client.FaunaClient;
+import com.fauna.query.QueryOptions;
 import com.fauna.query.builder.Query;
 import com.fauna.response.QuerySuccess;
 import com.fauna.types.Page;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
@@ -92,7 +94,8 @@ public class ProductsController {
         // as a parameter as well as an optional return type. In this case, we are
         // using the Product.class to specify that the query will return a single
         // item representing a Product.
-        return CompletableFuture.completedFuture(client.paginate(query, Product.class).next());
+        return CompletableFuture.completedFuture(client.paginate(query, Product.class,
+                QueryOptions.builder().timeout(Duration.ofSeconds(30)).build()).next());
     }
 
     @Async
