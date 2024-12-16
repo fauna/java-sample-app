@@ -95,21 +95,20 @@ To run the app, you'll need:
 3. Use the CLI to create the `ECommerceJava` database:
 
     ```sh
-    # Replace 'us-std' with your preferred Region Group
-    # identifier: 'us-std' (United States), 'eu-std' (Europe),
-    # or `global`.
+    # Replace 'us' with your preferred Region Group:
+    # 'us' (United States), 'eu' (Europe), or `global`.
     fauna database create \
       --name ECommerceJava \
-      --database us-std
+      --database us
     ```
 
 4.  Push the `.fsl` files in the `schema` directory to the `ECommerceJava`
     database:
 
     ```sh
-    # Replace 'us-std' with your Region Group identifier.
+    # Replace 'us' with your Region Group.
     fauna schema push \
-      --database us-std/ECommerceJava \
+      --database us/ECommerceJava \
       --dir ./schema
     ```
 
@@ -119,14 +118,14 @@ To run the app, you'll need:
 
     ```sh
     fauna schema status \
-      --database us-std/ECommerceJava
+      --database us/ECommerceJava
     ```
 
 6.  When the status is `ready`, commit the staged schema to the database:
 
     ```sh
     fauna schema commit \
-      --database us-std/ECommerceJava
+      --database us/ECommerceJava
     ```
 
     The commit applies the staged schema to the database. The commit creates the
@@ -137,7 +136,7 @@ To run the app, you'll need:
 
     ```sh
     fauna query "Key.create({ role: 'server' })" \
-      --database us-std/ECommerceJava
+      --database us/ECommerceJava
     ```
 
    Copy the returned `secret`. The app can use the key's secret to authenticate
@@ -244,7 +243,7 @@ Customer documents and related API responses:
 
     ```sh
     fauna schema push \
-      --database us-std/ECommerceJava \
+      --database us/ECommerceJava \
       --dir ./schema
     ```
 
@@ -253,7 +252,7 @@ Customer documents and related API responses:
 4.  Check the status of the staged schema:
     ```sh
     fauna schema status \
-      --database us-std/ECommerceJava
+      --database us/ECommerceJava
     ```
 
 5.  When the status is `ready`, commit the staged schema changes to the
@@ -261,7 +260,7 @@ Customer documents and related API responses:
 
     ```sh
     fauna schema commit \
-      --database us-std/ECommerceJava
+      --database us/ECommerceJava
     ```
 
 6. In `CustomersController.java`, add the
