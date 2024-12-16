@@ -68,18 +68,14 @@ To run the app, you'll need:
 
 - Your preferred flavor of Java 17
 
-- [Fauna CLI](https://docs.fauna.com/fauna/current/tools/shell/) v3.0.0 or later.
+- [Fauna CLI](https://docs.fauna.com/fauna/current/tools/shell/) 4.0.0-beta or later.
+    - [Node.js](https://nodejs.org/en/download/) v20.x or later.
 
   To install the CLI, run:
 
     ```sh
-    npm install -g fauna-shell@latest
+    npm install -g fauna-shell@">=4.0.0-beta"
     ```
-
-You should also be familiar with basic Fauna CLI commands and usage. For an
-overview, see the [Fauna CLI
-docs](https://docs.fauna.com/fauna/current/tools/shell/).
-
 
 ## Setup
 
@@ -90,75 +86,58 @@ docs](https://docs.fauna.com/fauna/current/tools/shell/).
     cd java-sample-app
     ```
 
-2. Log in to Fauna using the Fauna CLI:
+2. If you haven't already, log in to Fauna using the Fauna CLI:
 
     ```sh
-    fauna cloud-login
+    fauna login
     ```
 
-    When prompted, enter:
-
-     * **Endpoint name:** `cloud` (Press Enter)
-     * **Email address:** The email address for your Fauna account.
-     * **Password:** The password for your Fauna account.
-     * **Which endpoint would you like to set as default?** The `cloud-*`
-       endpoint for your preferred region group. For example, to use the US
-       region group, use `cloud-us`.
-
-    The command requires an email and password login. If you log in to Fauna
-    using GitHub or Netlify, you can enable email and password login using the
-    [Forgot Password](https://dashboard.fauna.com/forgot-password) workflow.
-
-3. Use the Fauna CLI to create the `ECommerceJava` database:
+3. Use the CLI to create the `ECommerceJava` database:
 
     ```sh
-    fauna create-database ECommerceJava
+    # Replace 'us-std' with your preferred Region Group
+    # identifier: 'us-std' (United States), 'eu-std' (Europe),
+    # or `global`.
+    fauna database create \
+      --name ECommerceJava \
+      --database us-std
     ```
 
-4. Create a
-   [`.fauna-project`](https://docs.fauna.com/fauna/current/tools/shell/#proj-config)
-   config file for the project:
-
-   ```sh
-   fauna project init
-   ```
-
-   When prompted, enter:
-
-    * `schema` as the schema directory.
-    * `dev` as the environment name.
-    * The default endpoint.
-    * `ECommerce` as the database.
-
-5.  Push the `.fsl` files in the `schema` directory to the `ECommerceJava`
+4.  Push the `.fsl` files in the `schema` directory to the `ECommerceJava`
     database:
 
     ```sh
-    fauna schema push
+    # Replace 'us-std' with your Region Group identifier.
+    fauna schema push \
+      --database us-std/ECommerceJava \
+      --dir ./schema
     ```
 
     When prompted, accept and stage the schema.
 
-6.  Check the status of the staged schema:
+5.  Check the status of the staged schema:
 
     ```sh
-    fauna schema status
+    fauna schema status \
+      --database us-std/ECommerceJava
     ```
 
-7.  When the status is `ready`, commit the staged schema to the database:
+6.  When the status is `ready`, commit the staged schema to the database:
 
     ```sh
-    fauna schema commit
+    fauna schema commit \
+      --database us-std/ECommerceJava
     ```
 
     The commit applies the staged schema to the database. The commit creates the
     collections and user-defined functions (UDFs) defined in the `.fsl` files of the
     `schema` directory.
 
-8. Create a key with the `server` role for the `ECommerceJava` database:
+7. Create a key with the `server` role for the `ECommerceJava` database:
 
     ```sh
-    fauna create-key --environment='' ECommerceJava server
+    fauna query "Key.create({ role: 'server' })" \
+      --database us-std/ECommerceJava
     ```
 
    Copy the returned `secret`. The app can use the key's secret to authenticate
@@ -170,6 +149,7 @@ The app includes a setup script that adds sample documents to the
 `ECommerceJava` database. From the root directory, run:
 
 ```sh
+chmod +x setup.sh
 FAUNA_SECRET=<secret> ./setup.sh
 ```
 
@@ -263,21 +243,25 @@ Customer documents and related API responses:
     database to stage the changes:
 
     ```sh
-    fauna schema push
+    fauna schema push \
+      --database us-std/ECommerceJava \
+      --dir ./schema
     ```
 
     When prompted, accept and stage the schema.
 
 4.  Check the status of the staged schema:
     ```sh
-    fauna schema status
+    fauna schema status \
+      --database us-std/ECommerceJava
     ```
 
 5.  When the status is `ready`, commit the staged schema changes to the
     database:
 
     ```sh
-    fauna schema commit
+    fauna schema commit \
+      --database us-std/ECommerceJava
     ```
 
 6. In `CustomersController.java`, add the

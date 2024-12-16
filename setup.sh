@@ -1,0 +1,7 @@
+fauna query --input seed/categories.fql --secret "$FAUNA_SECRET"
+echo -e "\n\n"
+fauna query --input seed/customers.fql --secret "$FAUNA_SECRET"
+echo -e "\n\n"
+fauna query --input seed/products.fql --secret "$FAUNA_SECRET"
+echo -e "\n\n"
+fauna query --input seed/orders.fql --secret "$FAUNA_SECRET"
