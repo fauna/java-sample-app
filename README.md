@@ -66,9 +66,9 @@ To run the app, you'll need:
 - A [Fauna account](https://dashboard.fauna.com/register). You can sign up for a
   free account at https://dashboard.fauna.com/register.
 
-- Your preferred flavor of Java 17
+- Your preferred flavor of Java 17.
 
-- [Fauna CLI](https://docs.fauna.com/fauna/current/tools/shell/) 4.0.0-beta or later.
+- [Fauna CLI v4 beta](https://docs.fauna.com/fauna/current/build/cli/v4/) or later.
     - [Node.js](https://nodejs.org/en/download/) v20.x or later.
 
   To install the CLI, run:
@@ -108,8 +108,7 @@ To run the app, you'll need:
     ```sh
     # Replace 'us' with your Region Group.
     fauna schema push \
-      --database us/ECommerceJava \
-      --dir ./schema
+      --database us/ECommerceJava
     ```
 
     When prompted, accept and stage the schema.
@@ -243,13 +242,13 @@ Customer documents and related API responses:
 
     ```sh
     fauna schema push \
-      --database us/ECommerceJava \
-      --dir ./schema
+      --database us/ECommerceJava
     ```
 
     When prompted, accept and stage the schema.
 
 4.  Check the status of the staged schema:
+
     ```sh
     fauna schema status \
       --database us/ECommerceJava
