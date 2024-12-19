@@ -1,4 +1,4 @@
-{"query":"[
+[
   {
     id: '999',
     name: 'Valued Customer',
@@ -11,4 +11,4 @@
       country: 'Netherlands'
     }
   }
-].map(c => Customer.byEmail(c.email).first() ?? Customer.create(c))"}
+].map(c => Customer.byEmail(c.email).first() ?? Customer.create(c))
