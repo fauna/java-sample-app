@@ -18,7 +18,7 @@ fauna eval "Key.create({ role: 'server' }).secret" | xargs > .fauna_key
 
 fauna schema push -y --active --dir=schema
 
-fauna import --collection Category --path seed/categories.json
-fauna import --collection Customer --path seed/customers.json
+fauna eval --file seed/categories.fql
+fauna eval --file seed/customers.fql
 fauna eval --file seed/products.fql
 fauna eval --file seed/orders.fql
