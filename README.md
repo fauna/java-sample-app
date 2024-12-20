@@ -96,7 +96,7 @@ To run the app, you'll need:
 
     ```sh
     # Replace 'us' with your preferred Region Group:
-    # 'us' (United States), 'eu' (Europe), or `global`.
+    # 'us' (United States), 'eu' (Europe), or `global` (available to Pro accounts and above).
     fauna database create \
       --name ECommerceJava \
       --database us
