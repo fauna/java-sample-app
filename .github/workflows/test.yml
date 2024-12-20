@@ -22,7 +22,7 @@ jobs:
           distribution: corretto
       - name: Install fauna-shell
         run:
-          npm install -g fauna-shell@">=4.0.0-beta"
+          npm install -g fauna-shell
       - name: Setup Test Database
         run: ./scripts/setup.sh
 
