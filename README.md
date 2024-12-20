@@ -143,12 +143,12 @@ To run the app, you'll need:
 
 ## Add sample data
 
-The app includes a setup script that adds sample documents to the
+The app includes a seed script that adds sample documents to the
 `ECommerceJava` database. From the root directory, run:
 
 ```sh
-chmod +x setup.sh
-FAUNA_SECRET=<secret> ./setup.sh
+chmod +x ./scripts/seed.sh
+FAUNA_SECRET=<secret> ./seed.sh
 ```
 
 You can view documents created by the script in the [Fauna
@@ -210,7 +210,7 @@ Customer documents and related API responses:
 1. If you haven't already, add the sample data:
 
     ```sh
-    FAUNA_SECRET=<secret> ./setup.sh
+    FAUNA_SECRET=<secret> ./scripts/seed.sh
     ```
 
     If the app server is running, stop the server by pressing Ctrl+C.

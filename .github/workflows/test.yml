@@ -22,13 +22,13 @@ jobs:
           distribution: corretto
       - name: Install fauna-shell
         run:
-          npm install -g fauna-shell
+          npm install -g fauna-shell@">=4.0.0-beta"
       - name: Setup Test Database
-        run: ./test/setup.sh
+        run: ./scripts/setup.sh
 
       - name: Test sample app
         run: |
           ./gradlew build
           FAUNA_ENDPOINT=http://localhost:8443 FAUNA_SECRET=`cat .fauna_key` ./gradlew bootRun > bootrun.log 2>&1  &
-          ./test/validate.sh
+          ./scripts/validate.sh
           cat bootrun.log
