@@ -148,7 +148,7 @@ The app includes a seed script that adds sample documents to the
 
 ```sh
 chmod +x ./scripts/seed.sh
-FAUNA_SECRET=<secret> ./seed.sh
+FAUNA_SECRET=<secret> ./scripts/seed.sh
 ```
 
 You can view documents created by the script in the [Fauna
