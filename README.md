@@ -69,7 +69,7 @@ To run the app, you'll need:
 - Your preferred flavor of Java 17.
 
 - [Fauna CLI v4](https://docs.fauna.com/fauna/current/build/cli/v4/).
-    - [Node.js](https://nodejs.org/en/download/) v20.x or later.
+    - [Node.js](https://nodejs.org/en/download/) v22.x or later.
 
   To install the CLI, run:
 
