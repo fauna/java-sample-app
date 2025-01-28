@@ -69,7 +69,8 @@ To run the app, you'll need:
 - Your preferred flavor of Java 17.
 
 - [Fauna CLI v4](https://docs.fauna.com/fauna/current/build/cli/v4/).
-    - [Node.js](https://nodejs.org/en/download/) v20.x or later.
+    - [Node.js](https://nodejs.org/en/download/) v20.18 or later.
+      - [Node.js](https://nodejs.org/en/download/) v22 or later recommended.
 
   To install the CLI, run:
 
@@ -95,7 +96,7 @@ To run the app, you'll need:
 3. Use the CLI to create the `ECommerceJava` database:
 
     ```sh
-    # Replace 'us' with your preferred Region Group:
+    # Replace 'us' with your preferred region group:
     # 'us' (United States), 'eu' (Europe), or `global` (available to Pro accounts and above).
     fauna database create \
       --name ECommerceJava \
@@ -106,7 +107,7 @@ To run the app, you'll need:
     database:
 
     ```sh
-    # Replace 'us' with your Region Group.
+    # Replace 'us' with your region group.
     fauna schema push \
       --database us/ECommerceJava
     ```
